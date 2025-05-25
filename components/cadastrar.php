@@ -1,82 +1,69 @@
 <?php
+include 'funcao.php';
 
-    require_once(__DIR__ . "/funcao.php");
-    
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $dados_pessoa = [
-            ':cpf' => preg_replace('/\D/', '', $_POST['cpf']),
-            ':nome' => $_POST['nome'],
-            ':sobrenome' => $_POST['sobrenome'],
-            ':data_nasc' => $_POST['data_nasc'],
-            ':telefone' => $_POST['telefone'],
-            ':email' => $_POST['email'],
-            ':cep' => preg_replace('/\D/', '', $_POST['cep']),
-            ':estado' => $_POST['estado'],
-            ':cidade' => $_POST['cidade'],
-            ':rua' => $_POST['rua'],
-            ':numero' => $_POST['numero']
-        ];
-        cadastrar_pessoa($dados_pessoa);
-    }
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $nome = $_POST['nome'];
+    $genero = $_POST['genero'];
+    $desenvolvedora = $_POST['desenvolvedora'];
+    $ano = $_POST['ano'];
+    inserirJogo($nome, $genero, $desenvolvedora, $ano);
+    echo "<p style='color: lightgreen;'>Jogo cadastrado com sucesso!</p>";
+}
 ?>
-<h2 class="mb-4">Cadastro de Pessoa</h2>
-    <form method="post">
-        <div class="row mb-3">
-            <div class="col-md-4">
-                <label for="cpf" class="form-label">CPF</label>
-                <input type="text" class="form-control" id="cpf" name="cpf" placeholder="000.000.000-00">
-            </div>
-            <div class="col-md-4">
-                <label for="nome" class="form-label">Nome</label>
-                <input type="text" class="form-control" id="nome" name="nome">
-            </div>
-            <div class="col-md-4">
-                <label for="sobrenome" class="form-label">Sobrenome</label>
-                <input type="text" class="form-control" id="sobrenome" name="sobrenome">
-            </div>
-        </div>
 
-        <div class="row mb-3">
-            <div class="col-md-4">
-                <label for="data_nasc" class="form-label">Data de data_nasc</label>
-                <input type="date" class="form-control" id="data_nasc" name="data_nasc">
-            </div>
-            <div class="col-md-4">
-                <label for="telefone" class="form-label">Telefone</label>
-                <input type="tel" class="form-control" id="telefone" name="telefone">
-            </div>
-            <div class="col-md-4">
-                <label for="email" class="form-label">E-mail</label>
-                <input type="email" class="form-control" id="email" name="email">
-            </div>
-        </div>
-
-        <h5 class="mt-4">Endereço</h5>
-        <div class="row mb-3">
-            <div class="col-md-3">
-                <label for="cep" class="form-label">CEP</label>
-                <input type="text" class="form-control" id="cep" name="cep">
-            </div>
-            <div class="col-md-3">
-                <label for="estado" class="form-label">Estado</label>
-                <input type="text" class="form-control" id="estado" name="estado">
-            </div>
-            <div class="col-md-3">
-                <label for="cidade" class="form-label">Cidade</label>
-                <input type="text" class="form-control" id="cidade" name="cidade">
-            </div>
-            <div class="col-md-3">
-                <label for="rua" class="form-label">Rua</label>
-                <input type="text" class="form-control" id="rua" name="rua">
-            </div>
-        </div>
-
-        <div class="row mb-4">
-            <div class="col-md-3">
-                <label for="numero" class="form-label">Número</label>
-                <input type="text" class="form-control" id="numero" name="numero">
-            </div>
-        </div>
-
-        <button type="submit" class="btn btn-primary">Cadastrar</button>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastrar Jogo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #202020;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px;
+        }
+        form {
+            background: #2e2e2e;
+            padding: 20px;
+            border-radius: 8px;
+            width: 300px;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin: 8px 0;
+            border-radius: 4px;
+            border: none;
+        }
+        button {
+            padding: 10px;
+            width: 100%;
+            background-color: #00ffcc;
+            color: black;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        a {
+            margin-top: 15px;
+            color: #00ffcc;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <h2>Cadastrar Novo Jogo</h2>
+    <form method="POST">
+        <input type="text" name="nome" placeholder="Nome do Jogo" required>
+        <input type="text" name="genero" placeholder="Gênero" required>
+        <input type="text" name="desenvolvedora" placeholder="Desenvolvedora" required>
+        <input type="number" name="ano" placeholder="Ano de Lançamento" required>
+        <button type="submit">Cadastrar</button>
     </form>
+    <a href="index.php">Voltar ao Início</a>
+</body>
+</html>

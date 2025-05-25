@@ -1,98 +1,66 @@
-<?php    
-    // Verifica se a ação é excluir
-    if (isset($_GET["acao"]) && $_GET["acao"] == "excluir") {
-        $id = $_GET["id"];
-        delete_pessoa($id);
-    }
-    // Verifica se um dados da pessoa foi enviado via POST para consultar
-    $search = isset($_POST["nome"]) ? $_POST["nome"]:'';
-
-    require_once(__DIR__ . "/funcao.php");
-
-    $lista_pessoas = lista_pessoas($search);   
+<?php
+include 'funcao.php';
+$jogos = listarJogos();
 ?>
-<h4>Pessoas Cadastradas</h4>
-    <form method="POST" class="mb-3">
-        <div class="input-group">
-            <input type="text" name="nome" class="form-control" placeholder="Filtrar por nome" value="<?php echo isset($_POST['nome']) ? htmlspecialchars($_POST['nome']) : ''; ?>">
-            <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i> Filtrar</button>
-        </div>
-    </form>
-    <div class="table-responsive">
-        <table class="table table-striped table-bordered mt-3">
-            <thead class="table-dark">
-                <tr>
-                    <th>CPF</th>
-                    <th>Nome</th>
-                    <th>Sobrenome</th>
-                    <th>Data Nasc.</th>
-                    <th>Telefone</th>
-                    <th>E-mail</th>
-                    <th>CEP</th>
-                    <th>Estado</th>
-                    <th>Cidade</th>
-                    <th>Rua</th>
-                    <th>Número</th>
-                    <th style="padding-inline: 20px;">Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                    if($lista_pessoas) {
-                        foreach($lista_pessoas as $pessoa) {
-                            $id = $pessoa["id"];
-                            $cpf  = formatar_cpf($pessoa["cpf"]); 
-                            $nome  = $pessoa["nome"]; 
-                            $sobrenome  = $pessoa["sobrenome"]; 
-                            $data_nasc  = $pessoa["data_nasc"]; 
-                            $telefone  = $pessoa["telefone"]; 
-                            $email  = $pessoa["email"]; 
-                            $cep  = $pessoa["cep"]; 
-                            $estado  = $pessoa["estado"]; 
-                            $cidade  = $pessoa["cidade"]; 
-                            $rua  = $pessoa["rua"]; 
-                            $numero  = $pessoa["numero"]; 
-                            echo "
-                            <tr>
-                                <td>{$cpf}</td>
-                                <td>{$nome}</td>
-                                <td>{$sobrenome}</td>
-                                <td>{$data_nasc}</td>
-                                <td>{$telefone}</td>
-                                <td>{$email}</td>
-                                <td>{$cep}</td>
-                                <td>{$estado}</td>
-                                <td>{$cidade}</td>
-                                <td>{$rua}</td>
-                                <td>{$numero}</td>
-                                <td >
-                                    <a class='btn btn-sm btn-warning' title='Alterar' href='?list&acao=alterar&id={$id}'>
-                                        <i class='bi bi-pencil-square'></i>
-                                    </a>
-                                    <button class='btn btn-sm btn-danger' title='Excluir' onclick='delete_pessoa({$id})'>
-                                        <i class='bi bi-trash-fill'></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            ";
-                        }
-                    }
-                    else {
-                        echo "
-                            <tr>
-                                <td colspan='12' class='text-center'>Nenhum registro encontrado</td>
-                            </tr>
-                        ";
-                    }
-                ?>                
-            </tbody>
-        </table>
-    </div>
 
-    <script>
-        const delete_pessoa = (id)=>{
-            if(confirm("Deseja realmente excluir?")) {
-                window.location.href="?list&acao=excluir&id=" + id;
-            }
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Jogos</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 30px;
         }
-    </script>
+        table {
+            margin: 20px auto;
+            width: 80%;
+            border-collapse: collapse;
+            background-color: #1e1e1e;
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid #333;
+        }
+        th {
+            background-color: #00ffcc;
+            color: black;
+        }
+        a {
+            color: #00ffcc;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Lista de Jogos Cadastrados</h1>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Gênero</th>
+            <th>Desenvolvedora</th>
+            <th>Ano</th>
+            <th>Ações</th>
+        </tr>
+        <?php while ($jogo = $jogos->fetch_assoc()): ?>
+            <tr>
+                <td><?= $jogo['id'] ?></td>
+                <td><?= $jogo['nome'] ?></td>
+                <td><?= $jogo['genero'] ?></td>
+                <td><?= $jogo['desenvolvedora'] ?></td>
+                <td><?= $jogo['ano_lancamento'] ?></td>
+                <td><a href="alterar.php?id=<?= $jogo['id'] ?>">Editar</a></td>
+            </tr>
+        <?php endwhile; ?>
+    </table>
+    <a href="index.php">Voltar ao Início</a>
+</body>
+</html>
